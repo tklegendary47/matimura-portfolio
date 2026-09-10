@@ -1,8 +1,11 @@
 /* =====================================================================
-   MATIMURA — Portfolio Interaction Layer (v2)
+   MATIMURA — Portfolio Interaction Layer (v3)
    Preloader / nav / kinetic reveals / magnetic UI / cinematic parallax
    Powered by GSAP + ScrollTrigger where available, with a plain-JS
    fallback so the site still works if the CDN scripts fail to load.
+   v3: rebuilt mobile menu — morphing hamburger, clip-path overlay panel,
+   staggered link cascade, backdrop, scroll-lock, ESC/resize-safe.
+   Works on every page that includes this file; no per-page JS needed.
    ===================================================================== */
 
 /* ---- CONFIG — edit these two lines with real project URLs when ready ---- */
@@ -52,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ---------------- Nav: scrolled state + mobile toggle ---------------- */
+  /* ---------------------------------------------------------------
+     NAV — scrolled state
+     --------------------------------------------------------------- */
   const nav = document.querySelector('.site-nav');
   const onScroll = () => {
     if (!nav) return;
@@ -62,14 +67,104 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  /* ---------------------------------------------------------------
+     MOBILE MENU — v3
+     One self-contained system, identical on every page:
+       · Morphing hamburger (bars → brass X, two-beat animation)
+       · Clip-path "light gate" panel sweep
+       · Links cascade in with per-link stagger + blur
+       · Backdrop dim + blur, injected automatically (no HTML change)
+       · Body scroll-lock, ESC to close, backdrop tap to close,
+         auto-close on link tap / resize past breakpoint / page hide
+       · aria-expanded state for screen readers
+     Expected markup (already in your pages):
+       <button class="nav-toggle" aria-label="Menu"><span></span>×3</button>
+       <nav class="nav-links"> <a>…</a> … </nav>
+     The three bars should sit inside a .bars wrapper if you update the
+     HTML (see README note); the CSS handles both flat and wrapped.
+     --------------------------------------------------------------- */
   const toggle = document.querySelector('.nav-toggle');
   const links = document.querySelector('.nav-links');
+  const MOBILE_QUERY = window.matchMedia('(max-width: 880px)');
+
   if (toggle && links) {
-    toggle.addEventListener('click', () => {
-      links.classList.toggle('open');
-      toggle.classList.toggle('active');
+    /* --- normalise toggle internals: ensure a .bars wrapper exists so
+       the three-bar morph positions identically on every page even if
+       a page's HTML has the spans loose or missing one --- */
+    let bars = toggle.querySelector('.bars');
+    if (!bars) {
+      bars = document.createElement('span');
+      bars.className = 'bars';
+      const spans = Array.from(toggle.querySelectorAll('span'));
+      if (spans.length === 3) {
+        spans.forEach(s => bars.appendChild(s));
+      } else {
+        for (let i = 0; i < 3; i++) bars.appendChild(document.createElement('span'));
+      }
+      toggle.appendChild(bars);
+    } else if (bars.children.length !== 3) {
+      bars.innerHTML = '<span></span><span></span><span></span>';
+    }
+    toggle.setAttribute('aria-label', toggle.getAttribute('aria-label') || 'Menu');
+    toggle.setAttribute('aria-expanded', 'false');
+
+    /* --- inject backdrop once (keeps HTML untouched) --- */
+    const backdrop = document.createElement('div');
+    backdrop.className = 'nav-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(backdrop);
+
+    /* --- index each link so CSS can stagger it via --i --- */
+    const menuItems = links.querySelectorAll('a');
+    menuItems.forEach((a, i) => a.style.setProperty('--i', i));
+
+    const openMenu = () => {
+      links.classList.add('open');
+      toggle.classList.add('active');
+      backdrop.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('menu-locked');
+    };
+    const closeMenu = () => {
+      if (!links.classList.contains('open')) return;
+      links.classList.remove('open');
+      toggle.classList.remove('active');
+      backdrop.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-locked');
+    };
+    const menuIsOpen = () => links.classList.contains('open');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menuIsOpen() ? closeMenu() : openMenu();
     });
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+    backdrop.addEventListener('click', closeMenu);
+    menuItems.forEach(a => a.addEventListener('click', closeMenu));
+
+    /* ESC key — always works, even if focus lands inside the panel */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menuIsOpen()) {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+
+    /* Rotate to landscape / grow past breakpoint → never leave a
+       half-open panel stranded */
+    const onViewportChange = () => { if (!MOBILE_QUERY.matches) closeMenu(); };
+    if (MOBILE_QUERY.addEventListener) {
+      MOBILE_QUERY.addEventListener('change', onViewportChange);
+    } else {
+      MOBILE_QUERY.addListener(onViewportChange); // legacy Safari
+    }
+
+    /* Safety nets: navigating away (bfcache) or app switching must
+       never restore a locked, open menu */
+    window.addEventListener('pagehide', closeMenu);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) closeMenu();
+    });
   }
 
   /* ---------------------------------------------------------------
@@ -110,29 +205,16 @@ document.addEventListener('DOMContentLoaded', () => {
       once: true,
       onEnter: (batch) => {
         batch.forEach((el, i) => {
-          // gsap.delayedCall runs on GSAP's own rAF ticker, so a whole batch
-          // stays frame-locked together instead of drifting the way stacked
-          // setTimeouts can under load — the stagger reads as one fluid wave.
           gsap.delayedCall(i * 0.04, () => {
             el.classList.add('in');
             if (el.classList.contains('light-sweep')) el.classList.add('sweep-run');
-            // Once a project card's one-time 3D flip-in finishes, hand its
-            // media panel fully over to GSAP for the continuous scroll-tilt
-            // below — otherwise the CSS transition keeps re-smoothing every
-            // GSAP-driven frame and the tilt feels sluggish instead of crisp.
             if (el.classList.contains('pcard')) {
               const media = el.querySelector('.pcard-media');
-              // 1.15s transform transition + 0.05s delay = 1.2s to fully settle;
-              // wait a beat longer so the handoff never clips the tail of the flip.
               if (media) gsap.delayedCall(1.45, () => {
                 media.style.transitionProperty = 'none';
-                media.classList.add('tilt-ready'); // only now is it safe for the scroll-tilt below to touch its transform
+                media.classList.add('tilt-ready');
               });
             }
-            // Roadmap twist-cards share one transition rule between their
-            // slow, smooth entrance flip and their snappy hover tilt. Once
-            // the entrance settles, swap to a fast duration so hover feels
-            // immediate instead of dragging out over a second.
             if (el.classList.contains('twist-card')) {
               gsap.delayedCall(1.2, () => { el.style.setProperty('--tw-dur', '0.35s'); });
             }
@@ -161,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.hero-meta .n, .pcard-stats .n').forEach(el => {
       const raw = el.textContent.trim();
       const match = raw.match(/^([\d]+(?:\.\d+)?)(.*)$/);
-      if (!match) return; // non-numeric values (e.g. "A-", "Full-Stack") stay static
+      if (!match) return; // non-numeric values stay static
       const target = parseFloat(match[1]);
       const suffix = match[2];
       const isDecimal = match[1].includes('.');
@@ -202,8 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------------------------------------------------------------
      Scroll-linked 3D twist on project cards — continuous rotateY
-     tied to scroll position, smoothed with GSAP quickTo so it
-     glides instead of snapping frame to frame.
+     tied to scroll position, smoothed with GSAP quickTo.
      --------------------------------------------------------------- */
   const tiltMedia = document.querySelectorAll('.pcard-media');
   if (tiltMedia.length && !reduceMotion) {
@@ -219,12 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const vh = window.innerHeight;
       tiltMedia.forEach(el => {
         const card = el.closest('.pcard');
-        // Gate on 'tilt-ready', not just 'in' — 'in' fires the instant the
-        // entrance flip *starts*. If this scroll-tilt also touched the
-        // element's transform while that 1.15s CSS transition was still
-        // running, the two would fight every frame and the flip would read
-        // as janky instead of clean. 'tilt-ready' is only added once the
-        // entrance transition has fully finished and handed the transform off.
         if (!card || !card.classList.contains('in') || !el.classList.contains('tilt-ready')) return;
         const rect = el.getBoundingClientRect();
         const centerOffset = (rect.top + rect.height / 2 - vh / 2) / vh;
@@ -264,9 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ---------------- Per-card spotlight glow (twist cards + project cards) ----------------
-     Uses a plain proxy object (not the CSS var directly) so GSAP's easing
-     doesn't strip the "px" unit the gradient position needs. */
+  /* ---------------- Per-card spotlight glow ---------------- */
   document.querySelectorAll('.tcard-inner, .pcard-body').forEach(card => {
     if (hasGSAP && !reduceMotion && fine) {
       const pos = { x: 0, y: 0 };
@@ -286,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------------- Atmosphere orb parallax (drift responds to scroll) ---------------- */
+  /* ---------------- Atmosphere orb parallax ---------------- */
   const orbs = document.querySelectorAll('.orb');
   if (orbs.length) {
     window.addEventListener('scroll', () => {
@@ -297,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  /* ---------------- Marquee — briefly speeds up on scroll for a lively feel ---------------- */
+  /* ---------------- Marquee — briefly speeds up on scroll ---------------- */
   const marqueeTrack = document.querySelector('.marquee-track');
   if (marqueeTrack && !reduceMotion) {
     let mqTimer = null;
@@ -386,4 +459,3 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
-
