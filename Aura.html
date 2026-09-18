@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura Hair Studio — Precision Hair Artistry, Harare</title>
+<meta name="description" content="Aura Hair Studio — precision cuts, color artistry, and braiding craft in Harare. Book your appointment on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --bg: #17110D;
+    --bg-panel: #221A14;
+    --bg-panel-2: #2B2119;
+    --ivory: #F3E9DA;
+    --ivory-dim: #D9CBB6;
+    --copper: #BE7F45;
+    --copper-bright: #D69A5F;
+    --rust: #8B3A2E;
+    --rust-bright: #A6493A;
+    --gold: #C9A24B;
+    --muted: #A69686;
+    --line: rgba(243, 233, 218, 0.14);
+
+    --display: 'Bodoni Moda', serif;
+    --body: 'Manrope', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+
+    --container: 1240px;
+    --edge: clamp(24px, 5vw, 72px);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ivory);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--copper); color: var(--bg); }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  .wrap {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding-left: var(--edge);
+    padding-right: var(--edge);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  /* ============ NAV ============ */
+  header.nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 26px var(--edge);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+    border-bottom: 1px solid transparent;
+  }
+  header.nav.scrolled {
+    background: rgba(23, 17, 13, 0.86);
+    backdrop-filter: blur(10px);
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo {
+    font-family: var(--display);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  .logo span { color: var(--copper-bright); font-style: italic; }
+
+  nav.links {
+    display: flex;
+    gap: 34px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  nav.links a {
+    position: relative;
+    padding-bottom: 4px;
+    color: var(--ivory-dim);
+    transition: color 0.25s ease;
+  }
+  nav.links a:hover { color: var(--ivory); }
+  nav.links a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0%;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  nav.links a:hover::after { width: 100%; }
+
+  .btn-wa {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--rust);
+    color: var(--ivory);
+    padding: 12px 22px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(243,233,218,0.15);
+    transition: background-color 0.25s ease, transform 0.25s ease;
+    white-space: nowrap;
+  }
+  .btn-wa:hover { background: var(--rust-bright); transform: translateY(-2px); }
+  .btn-wa svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .nav-toggle { display: none; }
+
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 100svh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+    padding-bottom: 80px;
+    overflow: hidden;
+  }
+  .hero-bg-grad {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(100deg, rgba(23,17,13,0.94) 0%, rgba(23,17,13,0.75) 38%, rgba(23,17,13,0.45) 62%, rgba(23,17,13,0.72) 100%),
+      radial-gradient(ellipse 900px 600px at 82% 18%, rgba(190,127,69,0.22), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 10% 90%, rgba(139,58,46,0.20), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 2.2s ease;
+    animation: heroKenBurns 16s ease-in-out infinite;
+  }
+  .hero-slide.active { opacity: 1; }
+  @keyframes heroKenBurns {
+    0% { transform: scale(1.08) translate(0, 0); }
+    50% { transform: scale(1.16) translate(-1.5%, -1%); }
+    100% { transform: scale(1.08) translate(0, 0); }
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+  }
+  .hero .eyebrow { margin-bottom: 26px; }
+  .hero h1 {
+    font-size: clamp(46px, 7vw, 84px);
+    color: var(--ivory);
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--copper-bright);
+  }
+  .hero-sub {
+    margin-top: 26px;
+    max-width: 460px;
+    font-size: 17px;
+    color: var(--ivory-dim);
+    font-weight: 400;
+  }
+  .hero-ctas {
+    margin-top: 42px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--copper);
+    color: #1A130D;
+    font-weight: 600;
+    padding: 16px 30px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+  .btn-primary:hover { background: var(--copper-bright); transform: translateY(-2px); }
+  .link-ghost {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ivory-dim);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .link-ghost:hover { color: var(--ivory); border-color: var(--gold); }
+
+  .hero-motif {
+    position: absolute;
+    right: -6%;
+    bottom: -8%;
+    width: min(56vw, 780px);
+    z-index: 1;
+    opacity: 0.9;
+  }
+  .hero-motif path {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 34px;
+    left: var(--edge);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    z-index: 2;
+  }
+  .scroll-cue .line {
+    width: 1px;
+    height: 34px;
+    background: linear-gradient(var(--gold), transparent);
+    animation: cueMove 2.2s ease-in-out infinite;
+  }
+  @keyframes cueMove {
+    0%, 100% { transform: scaleY(1); transform-origin: top; }
+    50% { transform: scaleY(0.4); transform-origin: top; }
+  }
+
+  /* ============ TICKER ============ */
+  .ticker-band {
+    background: var(--rust);
+    padding: 16px 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(243,233,218,0.12);
+    border-bottom: 1px solid rgba(243,233,218,0.12);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: tickerScroll 32s linear infinite;
+  }
+  .ticker-track span {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ivory);
+    padding: 0 28px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .ticker-track span::after {
+    content: "◆";
+    color: var(--gold);
+    font-size: 8px;
+  }
+  @keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ============ SECTION SHELL ============ */
+  section { position: relative; padding: 128px 0; }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+  }
+  .section-head h2 { font-size: clamp(34px, 4.4vw, 52px); }
+  .section-head p {
+    max-width: 340px;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  /* ============ ABOUT ============ */
+  .about { background: var(--bg-panel); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .about-quote {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(26px, 3.2vw, 38px);
+    line-height: 1.4;
+    color: var(--ivory);
+  }
+  .about-quote .accent { color: var(--copper-bright); }
+  .about-attrib {
+    margin-top: 28px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .stat-row .num {
+    font-family: var(--display);
+    font-size: 34px;
+    color: var(--copper-bright);
+  }
+  .stat-row .label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+    max-width: 200px;
+  }
+
+  /* ============ SERVICES — SHADE & TEXTURE INDEX ============ */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  .tag-card {
+    position: relative;
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 4px 4px 16px 16px;
+    padding: 30px 26px 26px;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .tag-card:hover {
+    transform: translateY(-6px) rotate(-0.6deg);
+    border-color: var(--copper);
+    box-shadow: 0 24px 50px -20px rgba(0,0,0,0.5);
+  }
+  .tag-hole {
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+  }
+  .swatch-strip {
+    height: 10px;
+    border-radius: 100px;
+    margin-bottom: 22px;
+  }
+  .swatch-strip.copper { background: linear-gradient(90deg, #7A4A24, #D69A5F); }
+  .swatch-strip.rust { background: linear-gradient(90deg, #5C1F17, #A6493A); }
+  .swatch-strip.gold { background: linear-gradient(90deg, #8A6B26, #C9A24B); }
+  .swatch-strip.ivory { background: linear-gradient(90deg, #7A6B57, #E4D6C0); }
+
+  .tag-card .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .tag-card h3 {
+    font-size: 23px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--ivory);
+  }
+  .tag-card p.desc {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 22px;
+    min-height: 42px;
+  }
+  .tag-card .foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .tag-card .price {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--ivory);
+  }
+  .tag-card .book-link {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--copper-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.25s ease;
+  }
+  .tag-card .book-link:hover { gap: 10px; }
+
+  /* ============ SIGNATURE LOOKS (image cards) ============ */
+  .looks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  .look-card {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--bg-panel);
+    isolation: isolate;
+  }
+  .look-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+  }
+  .look-card:hover img { transform: scale(1.07); }
+  .look-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(23,17,13,0.92) 0%, rgba(23,17,13,0.25) 55%, transparent 80%);
+    z-index: 1;
+  }
+  .look-caption {
+    position: absolute;
+    left: 22px; right: 22px; bottom: 20px;
+    z-index: 2;
+  }
+  .look-caption .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .look-caption h3 {
+    font-size: 22px;
+    color: var(--ivory);
+    font-weight: 500;
+  }
+  .look-caption p {
+    font-size: 13px;
+    color: var(--ivory-dim);
+    margin-top: 4px;
+  }
+
+  /* ============ STUDIO GALLERY (slideshow) ============ */
+  .gallery-slideshow {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 16 / 8;
+    background: var(--bg-panel);
+  }
+  .gallery-track { position: absolute; inset: 0; }
+  .gallery-item {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .gallery-item.active { opacity: 1; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-item::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(23,17,13,0.85) 0%, transparent 45%);
+  }
+  .gallery-cap {
+    position: absolute; left: 32px; bottom: 26px; z-index: 2;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    color: var(--ivory);
+  }
+  .gallery-cap span { color: var(--gold); margin-right: 10px; }
+  .gallery-arrows {
+    position: absolute; right: 24px; bottom: 24px; z-index: 3;
+    display: flex; gap: 10px;
+  }
+  .gallery-arrow {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(23,17,13,0.6);
+    border: 1px solid rgba(243,233,218,0.25);
+    color: var(--ivory);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    backdrop-filter: blur(4px);
+  }
+  .gallery-arrow:hover { background: var(--copper); border-color: var(--copper); }
+  .gallery-arrow svg { width: 18px; height: 18px; }
+  .gallery-dots {
+    position: absolute; left: 32px; top: 26px; z-index: 3;
+    display: flex; gap: 8px;
+  }
+  .gallery-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(243,233,218,0.35);
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+  .gallery-dot.active { background: var(--gold); transform: scale(1.3); }
+
+  /* ============ PROCESS ============ */
+  .process { background: var(--bg-panel); }
+  .process-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .process-step {
+    background: var(--bg-panel);
+    padding: 40px 28px;
+  }
+  .process-step .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 20px;
+  }
+  .process-step h4 {
+    font-family: var(--display);
+    font-size: 21px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--ivory);
+  }
+  .process-step p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ============ TESTIMONIAL ============ */
+  .testimonial {
+    text-align: center;
+    padding: 140px 0;
+  }
+  .testimonial blockquote {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(26px, 4vw, 44px);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.35;
+    color: var(--ivory);
+  }
+  .testimonial .quote-mark {
+    font-family: var(--display);
+    font-size: 64px;
+    color: var(--copper);
+    line-height: 1;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .testimonial-attrib {
+    margin-top: 30px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .testimonial-dots {
+    margin-top: 34px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .testimonial-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+  .testimonial-dots span.active { background: var(--gold); }
+
+  /* ============ CTA BAND ============ */
+  .cta-band {
+    background: var(--rust);
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 600px 400px at 85% 20%, rgba(255,255,255,0.08), transparent 60%);
+  }
+  .cta-inner {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cta-inner h2 {
+    font-size: clamp(32px, 4.6vw, 52px);
+    max-width: 560px;
+    color: var(--ivory);
+  }
+  .cta-band .btn-primary {
+    background: var(--ivory);
+    color: var(--rust);
+  }
+  .cta-band .btn-primary:hover { background: #fff; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 80px 0 40px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-logo {
+    font-family: var(--display);
+    font-size: 26px;
+    margin-bottom: 16px;
+  }
+  .footer-logo span { color: var(--copper-bright); font-style: italic; }
+  .footer-grid p { color: var(--muted); font-size: 14px; max-width: 260px; }
+  .footer-col h5 {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .footer-col a, .footer-col p {
+    display: block;
+    font-size: 14px;
+    color: var(--ivory-dim);
+    margin-bottom: 10px;
+  }
+  .footer-col a:hover { color: var(--ivory); }
+  .footer-bottom {
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  /* ============ FLOATING WHATSAPP ============ */
+  .wa-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 200;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px -8px rgba(37, 211, 102, 0.6);
+    transition: transform 0.25s ease;
+  }
+  .wa-float:hover { transform: scale(1.08); }
+  .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+  .wa-float .pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #25D366;
+    animation: waPulse 2.4s ease-out infinite;
+    z-index: -1;
+  }
+  @keyframes waPulse {
+    0% { transform: scale(1); opacity: 0.55; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+
+  /* ============ REVEAL UTILITY ============ */
+  .reveal { opacity: 0; transform: translateY(28px); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    nav.links { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 56px; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .process-row { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .hero-motif { width: 80vw; opacity: 0.5; }
+    .looks-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-slideshow { aspect-ratio: 16 / 11; }
+  }
+  @media (max-width: 620px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .process-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-inner { flex-direction: column; align-items: flex-start; }
+    .hero-sub { max-width: 100%; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+    .looks-grid { grid-template-columns: 1fr; }
+    .gallery-slideshow { aspect-ratio: 4 / 5; }
+    .gallery-cap { left: 20px; bottom: 18px; font-size: 11px; }
+    .gallery-arrows { right: 16px; bottom: 16px; }
+    .gallery-arrow { width: 36px; height: 36px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="logo">AUR<span>a</span></div>
+  <nav class="links">
+    <a href="#services">Index</a>
+    <a href="#about">Studio</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Visit</a>
+  </nav>
+  <a class="btn-wa" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20an%20appointment" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.31-1.94 1.36-.5.05-1.02.24-3.4-.71-2.88-1.15-4.73-4.06-4.87-4.25-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.28.75 1.24 1.61 2.01 1.11 1 2.05 1.31 2.33 1.46.28.14.44.12.6-.07.17-.19.71-.83.9-1.11.19-.28.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+    Book on WhatsApp
+  </a>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1600948836101-f9ffda59d250?auto=format&fit=crop&w=1600&q=75')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1600&q=75')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1600&q=75')"></div>
+  </div>
+  <div class="hero-bg-grad"></div>
+  <svg class="hero-motif" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+    <path d="M40 60 C 220 20, 260 260, 460 220 S 560 480, 380 560 S 140 660, 220 480" stroke-dasharray="1400" stroke-dashoffset="1400" id="motifPath"/>
+    <path d="M90 110 C 250 90, 270 300, 440 270" stroke-opacity="0.5" stroke-dasharray="700" stroke-dashoffset="700" id="motifPath2"/>
+  </svg>
+  <div class="wrap hero-inner">
+    <div class="eyebrow reveal" id="heroEyebrow">Harare — Est. Studio N°1</div>
+    <h1 class="reveal" id="heroLine1">Precision cuts,</h1>
+    <h1 class="reveal" id="heroLine2"><em>artistry</em> in colour.</h1>
+    <p class="hero-sub reveal" id="heroSub">Aura is a private hair studio built for people who treat their appointment as an hour of craft, not a queue. Cut, colour, and braiding work, done by hand, one client at a time.</p>
+    <div class="hero-ctas reveal" id="heroCtas">
+      <a class="btn-primary" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20an%20appointment" target="_blank" rel="noopener">Book your seat →</a>
+      <a class="link-ghost" href="#services">View the Index</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>Scroll</div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker-band">
+  <div class="ticker-track" id="tickerTrack">
+    <span>Precision Cutting</span><span>Balayage &amp; Colour</span><span>Braiding &amp; Locs</span><span>Silk Press</span><span>Bridal Styling</span><span>Scalp Therapy</span>
+    <span>Precision Cutting</span><span>Balayage &amp; Colour</span><span>Braiding &amp; Locs</span><span>Silk Press</span><span>Bridal Styling</span><span>Scalp Therapy</span>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow reveal">The Studio</div>
+      <p class="about-quote reveal" style="margin-top:24px;">We built Aura on one belief: <span class="accent">good hair work is unhurried.</span> Every appointment is single-client, by consultation, with time built in for the conversation before the comb ever touches your hair.</p>
+      <div class="about-attrib reveal">— Founding Stylist, Aura Hair Studio</div>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-row"><span class="num">7</span><span class="label">Years practicing precision cutting &amp; colour</span></div>
+      <div class="stat-row"><span class="num">1</span><span class="label">Client per chair, per appointment — no doubling up</span></div>
+      <div class="stat-row"><span class="num">60</span><span class="label">Minutes minimum consultation before any first colour service</span></div>
+      <div class="stat-row"><span class="num">6</span><span class="label">Days a week, by appointment only</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES — SHADE & TEXTURE INDEX ============ -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">The Shade &amp; Texture<br>Index</h2>
+      <p class="reveal">Every service, numbered the way we tag our colour formulas — so you know exactly what you're booking before you arrive.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip copper"></div>
+        <span class="num">N° 01 — CUT</span>
+        <h3>Precision Cut &amp; Style</h3>
+        <p class="desc">Consultation, wash, precision cut, and finish styling.</p>
+        <div class="foot">
+          <span class="price">$25</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20a%20Precision%20Cut%20%26%20Style" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip gold"></div>
+        <span class="num">N° 02 — COLOUR</span>
+        <h3>Balayage &amp; Colour</h3>
+        <p class="desc">Hand-painted balayage or full colour, formulated to your natural base.</p>
+        <div class="foot">
+          <span class="price">From $60</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20Balayage%20%26%20Colour" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip ivory"></div>
+        <span class="num">N° 03 — TEXTURE</span>
+        <h3>Braiding &amp; Protective Styles</h3>
+        <p class="desc">Box braids, cornrows, and protective styling, sized to your density.</p>
+        <div class="foot">
+          <span class="price">From $35</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20Braiding" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip rust"></div>
+        <span class="num">N° 04 — SMOOTH</span>
+        <h3>Silk Press &amp; Treatment</h3>
+        <p class="desc">Deep condition and silk press, finished with a heat-protectant seal.</p>
+        <div class="foot">
+          <span class="price">$30</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20a%20Silk%20Press" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip copper"></div>
+        <span class="num">N° 05 — EVENT</span>
+        <h3>Bridal &amp; Event Styling</h3>
+        <p class="desc">Trial included. On-site styling available for weddings and shoots.</p>
+        <div class="foot">
+          <span class="price">From $80</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20enquire%20about%20Bridal%20Styling" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+      <div class="tag-card reveal">
+        <div class="tag-hole"></div>
+        <div class="swatch-strip gold"></div>
+        <span class="num">N° 06 — THERAPY</span>
+        <h3>Scalp &amp; Hair Therapy</h3>
+        <p class="desc">Scalp analysis, exfoliation, and restorative treatment for growth care.</p>
+        <div class="foot">
+          <span class="price">$20</span>
+          <a class="book-link" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20Scalp%20%26%20Hair%20Therapy" target="_blank" rel="noopener">Book →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SIGNATURE LOOKS ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">Signature Looks</h2>
+      <p class="reveal">A closer look at the work behind the Index — three of what we're asked for most.</p>
+    </div>
+    <div class="looks-grid">
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=900&q=75" alt="Precision cut and style in progress" loading="lazy">
+        <div class="look-caption">
+          <span class="num">N° 01</span>
+          <h3>Precision Cut &amp; Style</h3>
+          <p>Shape-first cutting, finished by hand.</p>
+        </div>
+      </div>
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1595475884562-073c30d45670?auto=format&fit=crop&w=900&q=75" alt="Colour and styling tools laid out for a session" loading="lazy">
+        <div class="look-caption">
+          <span class="num">N° 02</span>
+          <h3>Balayage &amp; Colour</h3>
+          <p>Formulated fresh for every client, every time.</p>
+        </div>
+      </div>
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&w=900&q=75" alt="Finishing a silk press with a blow dryer and round brush" loading="lazy">
+        <div class="look-caption">
+          <span class="num">N° 04</span>
+          <h3>Silk Press &amp; Finish</h3>
+          <p>Glossy, heat-protected, built to last.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ STUDIO GALLERY ============ -->
+<section class="about" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">Inside the Studio</h2>
+      <p class="reveal">A look around, chair by chair.</p>
+    </div>
+    <div class="gallery-slideshow reveal" id="gallerySlideshow">
+      <div class="gallery-track">
+        <div class="gallery-item active"><img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?auto=format&fit=crop&w=1400&q=75" alt="Salon chairs facing circular mirrors"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1400&q=75" alt="Modern salon interior with brick wall"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=75" alt="Salon chairs at a white vanity counter"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1637777269327-c4d5c7944d7b?auto=format&fit=crop&w=1400&q=75" alt="Row of salon sinks"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1400&q=75" alt="Client seated in the styling chair"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=75" alt="Finishing a style with a hair dryer"></div>
+      </div>
+      <div class="gallery-dots" id="galleryDots"></div>
+      <div class="gallery-cap"><span id="galleryIndex">01</span><span id="galleryLabel">The chairs</span></div>
+      <div class="gallery-arrows">
+        <div class="gallery-arrow" id="galleryPrev" role="button" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div class="gallery-arrow" id="galleryNext" role="button" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">How an appointment<br>actually runs</h2>
+      <p class="reveal">Four stages, every time — nothing rushed, nothing skipped.</p>
+    </div>
+    <div class="process-row">
+      <div class="process-step reveal">
+        <span class="num">01</span>
+        <h4>Consultation</h4>
+        <p>We talk texture, history, and what you actually want to walk out with — before anything is mixed.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">02</span>
+        <h4>Formulation</h4>
+        <p>Your colour or treatment is mixed specifically for your hair that day, not a fixed house recipe.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">03</span>
+        <h4>Application</h4>
+        <p>Unhurried, single-client attention from start to finish — your stylist doesn't split time with anyone else.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">04</span>
+        <h4>Finish &amp; Care</h4>
+        <p>A finish style you can recreate at home, plus aftercare notes sent straight to your WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="testimonial">
+  <div class="wrap">
+    <span class="quote-mark reveal">"</span>
+    <blockquote class="reveal">The first salon that asked what my hair does on a rainy day before touching a single strand. That's when I knew this was different.</blockquote>
+    <div class="testimonial-attrib reveal">— T. Moyo, client since 2024</div>
+    <div class="testimonial-dots reveal">
+      <span class="active"></span><span></span><span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="cta-band" id="contact">
+  <div class="wrap cta-inner">
+    <h2>Ready for<br>your next look?</h2>
+    <a class="btn-primary" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20an%20appointment" target="_blank" rel="noopener">Message us on WhatsApp →</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">AUR<span>a</span></div>
+        <p>A private hair studio in Harare — precision cuts, colour artistry, and braiding craft, by appointment.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Visit</h5>
+        <p>Borrowdale Village Walk<br>Harare, Zimbabwe</p>
+      </div>
+      <div class="footer-col">
+        <h5>Hours</h5>
+        <p>Tue – Sat, 9am – 6pm<br>Closed Sun &amp; Mon</p>
+      </div>
+      <div class="footer-col">
+        <h5>Reach Us</h5>
+        <a href="https://wa.me/263770000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Aura Hair Studio. All rights reserved.</span>
+      <span>Site by Takudzwa Matimura — Web Projects</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a class="wa-float" href="https://wa.me/263770000000?text=Hi%20Aura%2C%20I%27d%20like%20to%20book%20an%20appointment" target="_blank" rel="noopener" aria-label="Message us on WhatsApp">
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.31-1.94 1.36-.5.05-1.02.24-3.4-.71-2.88-1.15-4.73-4.06-4.87-4.25-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.28.75 1.24 1.61 2.01 1.11 1 2.05 1.31 2.33 1.46.28.14.44.12.6-.07.17-.19.71-.83.9-1.11.19-.28.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+</a>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Nav scroll state
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  if (!reduced) {
+    // Hero load sequence
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('#heroEyebrow', { opacity: 1, y: 0, duration: 0.7 })
+      .to('#heroLine1', { opacity: 1, y: 0, duration: 0.9 }, '-=0.35')
+      .to('#heroLine2', { opacity: 1, y: 0, duration: 0.9 }, '-=0.6')
+      .to('#heroSub', { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
+      .to('#heroCtas', { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
+
+    gsap.to('#motifPath', { strokeDashoffset: 0, duration: 2.4, delay: 0.3, ease: 'power2.inOut' });
+    gsap.to('#motifPath2', { strokeDashoffset: 0, duration: 2.2, delay: 0.8, ease: 'power2.inOut' });
+
+    // Scroll reveals
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (['heroEyebrow','heroLine1','heroLine2','heroSub','heroCtas'].includes(el.id)) return;
+      gsap.to(el, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' }
+      });
+    });
+
+    // Stagger the tag cards specifically
+    gsap.utils.toArray('.tag-card').forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1, y: 0, duration: 0.7, delay: (i % 3) * 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 90%' }
+      });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    document.querySelectorAll('#motifPath, #motifPath2').forEach(el => el.style.strokeDashoffset = 0);
+  }
+
+  // ---------- Hero background slideshow (crossfade) ----------
+  (function heroSlideshow() {
+    const slides = document.querySelectorAll('#heroSlideshow .hero-slide');
+    if (!slides.length) return;
+    let idx = 0;
+    setInterval(() => {
+      slides[idx].classList.remove('active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+    }, 6000);
+  })();
+
+  // ---------- Studio Gallery carousel ----------
+  (function gallery() {
+    const root = document.getElementById('gallerySlideshow');
+    if (!root) return;
+    const items = root.querySelectorAll('.gallery-item');
+    const dotsWrap = document.getElementById('galleryDots');
+    const idxLabel = document.getElementById('galleryIndex');
+    const capLabel = document.getElementById('galleryLabel');
+    const labels = ['The chairs', 'The studio', 'The vanity', 'The basins', 'The seat', 'The finish'];
+    let current = 0;
+    let timer;
+
+    items.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => go(i));
+      dotsWrap.appendChild(dot);
+    });
+    const dots = dotsWrap.querySelectorAll('.gallery-dot');
+
+    function go(i) {
+      items[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (i + items.length) % items.length;
+      items[current].classList.add('active');
+      dots[current].classList.add('active');
+      idxLabel.textContent = String(current + 1).padStart(2, '0');
+      capLabel.textContent = labels[current] || '';
+      restart();
+    }
+    function restart() {
+      clearInterval(timer);
+      timer = setInterval(() => go(current + 1), 5000);
+    }
+
+    document.getElementById('galleryNext').addEventListener('click', () => go(current + 1));
+    document.getElementById('galleryPrev').addEventListener('click', () => go(current - 1));
+    restart();
+  })();
+</script>
+</body>
+</html>

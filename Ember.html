@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember — Wood-Fired Kitchen, Harare</title>
+<meta name="description" content="Ember — a wood-fired kitchen in Harare. Charcoal-grilled, slow-smoked, open-flame cooking. Reserve on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --char: #1A1815;
+    --char-panel: #221E19;
+    --char-panel-2: #2A241D;
+    --smoke: #F2EDE6;
+    --smoke-dim: #D8CEC0;
+    --ember: #D6491F;
+    --ember-bright: #EF6B3B;
+    --amber: #E8A33D;
+    --herb: #5C6E48;
+    --muted: #9C8F7C;
+    --line: rgba(242, 237, 230, 0.13);
+
+    --display: 'Zilla Slab', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+
+    --container: 1240px;
+    --edge: clamp(24px, 5vw, 72px);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--char);
+    color: var(--smoke);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 1px 1px at 20% 30%, rgba(255,255,255,0.02) 50%, transparent 50%);
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--ember); color: var(--smoke); }
+  :focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .wrap { max-width: var(--container); margin: 0 auto; padding-left: var(--edge); padding-right: var(--edge); }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--amber); }
+
+  h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: -0.01em; line-height: 1.03; }
+
+  /* ============ NAV ============ */
+  header.nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 26px var(--edge);
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background-color 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+    border-bottom: 1px solid transparent;
+  }
+  header.nav.scrolled {
+    background: rgba(26, 24, 21, 0.88);
+    backdrop-filter: blur(10px);
+    padding-top: 16px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: var(--display); font-size: 24px; font-weight: 700; letter-spacing: 0.02em; }
+  .logo span { color: var(--ember-bright); }
+
+  nav.links {
+    display: flex; gap: 34px;
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  nav.links a { position: relative; padding-bottom: 4px; color: var(--smoke-dim); transition: color 0.25s ease; }
+  nav.links a:hover { color: var(--smoke); }
+  nav.links a::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 0%; height: 1px;
+    background: var(--ember-bright); transition: width 0.3s ease;
+  }
+  nav.links a:hover::after { width: 100%; }
+
+  .btn-wa {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--ember); color: var(--smoke);
+    padding: 12px 22px; border-radius: 3px;
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid rgba(242,237,230,0.15);
+    transition: background-color 0.25s ease, transform 0.25s ease;
+    white-space: nowrap;
+  }
+  .btn-wa:hover { background: var(--ember-bright); transform: translateY(-2px); }
+  .btn-wa svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* ============ HERO ============ */
+  .hero { min-height: 100svh; position: relative; display: flex; align-items: center; padding-top: 120px; padding-bottom: 80px; overflow: hidden; }
+  .hero-bg-grad {
+    position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(26,24,21,0.88) 0%, rgba(26,24,21,0.55) 45%, rgba(26,24,21,0.92) 100%),
+      radial-gradient(ellipse 900px 700px at 50% 100%, rgba(214,73,31,0.28), transparent 65%),
+      radial-gradient(ellipse 600px 400px at 85% 10%, rgba(232,163,61,0.14), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-slideshow { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero-slide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transform: scale(1.08);
+    transition: opacity 2.2s ease;
+    animation: heroKenBurns 16s ease-in-out infinite;
+  }
+  .hero-slide.active { opacity: 1; }
+  @keyframes heroKenBurns {
+    0% { transform: scale(1.08) translate(0,0); }
+    50% { transform: scale(1.16) translate(-1.5%,-1%); }
+    100% { transform: scale(1.08) translate(0,0); }
+  }
+  .embers { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .ember-dot {
+    position: absolute;
+    bottom: -10px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px 2px rgba(232,163,61,0.7);
+    opacity: 0;
+    animation: rise 7s linear infinite;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-92vh) translateX(var(--drift, 20px)); opacity: 0; }
+  }
+
+  .hero-inner { position: relative; z-index: 2; max-width: 880px; margin: 0 auto; text-align: center; }
+  .hero .eyebrow { justify-content: center; margin-bottom: 26px; }
+  .hero .eyebrow::before { display: none; }
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 96px);
+    color: var(--smoke);
+    text-transform: uppercase;
+  }
+  .hero h1 .ember-word { color: var(--ember-bright); font-style: italic; text-transform: none; }
+  .hero-sub {
+    margin: 28px auto 0; max-width: 480px;
+    font-size: 17px; color: var(--smoke-dim); font-weight: 400;
+  }
+  .hero-ctas { margin-top: 42px; display: flex; align-items: center; justify-content: center; gap: 22px; flex-wrap: wrap; }
+  .btn-primary {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--amber); color: #201804; font-weight: 600;
+    padding: 16px 30px; border-radius: 3px;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+  }
+  .btn-primary:hover { background: #f4b859; transform: translateY(-2px); }
+  .link-ghost {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--smoke-dim); border-bottom: 1px solid var(--line); padding-bottom: 4px;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .link-ghost:hover { color: var(--smoke); border-color: var(--amber); }
+
+  .scroll-cue {
+    position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); z-index: 2;
+  }
+  .scroll-cue .line { width: 1px; height: 34px; background: linear-gradient(var(--amber), transparent); animation: cueMove 2.2s ease-in-out infinite; }
+  @keyframes cueMove { 0%, 100% { transform: scaleY(1); transform-origin: top; } 50% { transform: scaleY(0.4); transform-origin: top; } }
+
+  /* ============ TICKER ============ */
+  .ticker-band { background: var(--ember); padding: 16px 0; overflow: hidden; border-top: 1px solid rgba(242,237,230,0.12); border-bottom: 1px solid rgba(242,237,230,0.12); }
+  .ticker-track { display: flex; width: max-content; animation: tickerScroll 30s linear infinite; }
+  .ticker-track span {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--smoke);
+    padding: 0 28px; white-space: nowrap; display: inline-flex; align-items: center; gap: 28px;
+  }
+  .ticker-track span::after { content: "🔥"; font-size: 11px; }
+  @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ============ SECTION SHELL ============ */
+  section { position: relative; padding: 128px 0; }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: 64px; flex-wrap: wrap; }
+  .section-head h2 { font-size: clamp(34px, 4.4vw, 52px); text-transform: uppercase; }
+  .section-head p { max-width: 340px; color: var(--muted); font-size: 14.5px; }
+
+  /* ============ PHILOSOPHY ============ */
+  .philosophy { background: var(--char-panel); }
+  .phi-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 80px; align-items: start; }
+  .phi-quote { font-family: var(--display); font-weight: 500; font-size: clamp(26px, 3.2vw, 38px); line-height: 1.35; color: var(--smoke); }
+  .phi-quote .accent { color: var(--ember-bright); font-style: italic; }
+  .phi-attrib { margin-top: 28px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .phi-stats { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+  .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .stat-row .num { font-family: var(--display); font-size: 34px; color: var(--ember-bright); }
+  .stat-row .label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: right; max-width: 210px; }
+
+  /* ============ MENU (fire-stage groups) ============ */
+  .menu-stage { margin-bottom: 90px; }
+  .menu-stage:last-child { margin-bottom: 0; }
+  .stage-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 34px; }
+  .stage-head h3 { font-size: clamp(26px, 3vw, 34px); text-transform: uppercase; color: var(--amber); }
+  .stage-head .stage-note { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+  .stage-line { flex: 1; height: 1px; background: var(--line); }
+
+  .dish-list { display: flex; flex-direction: column; }
+  .dish-row {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+  }
+  .dish-row:first-child { border-top: 1px solid var(--line); }
+  .dish-name { font-family: var(--display); font-size: 20px; font-weight: 500; color: var(--smoke); }
+  .dish-desc { font-size: 13.5px; color: var(--muted); margin-top: 6px; max-width: 480px; }
+  .dish-price { font-family: var(--mono); font-size: 16px; color: var(--amber); white-space: nowrap; padding-top: 3px; }
+
+  /* ============ FROM THE GRILL (image cards) ============ */
+  .looks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .look-card {
+    position: relative; border-radius: 4px; overflow: hidden;
+    aspect-ratio: 4 / 5; background: var(--char-panel); isolation: isolate;
+  }
+  .look-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+  .look-card:hover img { transform: scale(1.07); }
+  .look-card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,24,21,0.94) 0%, rgba(26,24,21,0.25) 55%, transparent 80%);
+    z-index: 1;
+  }
+  .look-caption { position: absolute; left: 22px; right: 22px; bottom: 20px; z-index: 2; }
+  .look-caption .num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--amber); display: block; margin-bottom: 6px; text-transform: uppercase; }
+  .look-caption h3 { font-family: var(--display); font-size: 22px; color: var(--smoke); font-weight: 600; text-transform: uppercase; }
+  .look-caption p { font-size: 13px; color: var(--smoke-dim); margin-top: 4px; }
+
+  /* ============ INSIDE EMBER (gallery slideshow) ============ */
+  .gallery-slideshow { position: relative; border-radius: 4px; overflow: hidden; aspect-ratio: 16 / 8; background: var(--char-panel); }
+  .gallery-track { position: absolute; inset: 0; }
+  .gallery-item { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; }
+  .gallery-item.active { opacity: 1; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+  .gallery-item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,24,21,0.88) 0%, transparent 45%); }
+  .gallery-cap { position: absolute; left: 32px; bottom: 26px; z-index: 2; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; color: var(--smoke); text-transform: uppercase; }
+  .gallery-cap span { color: var(--amber); margin-right: 10px; }
+  .gallery-arrows { position: absolute; right: 24px; bottom: 24px; z-index: 3; display: flex; gap: 10px; }
+  .gallery-arrow {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(26,24,21,0.6); border: 1px solid rgba(242,237,230,0.25); color: var(--smoke);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background-color 0.25s ease; backdrop-filter: blur(4px);
+  }
+  .gallery-arrow:hover { background: var(--ember); border-color: var(--ember); }
+  .gallery-arrow svg { width: 18px; height: 18px; }
+  .gallery-dots { position: absolute; left: 32px; top: 26px; z-index: 3; display: flex; gap: 8px; }
+  .gallery-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(242,237,230,0.35); cursor: pointer; transition: background-color 0.25s ease, transform 0.25s ease; }
+  .gallery-dot.active { background: var(--amber); transform: scale(1.3); }
+
+  /* ============ PROCESS ============ */
+  .process { background: var(--char-panel); }
+  .process-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .process-step { background: var(--char-panel); padding: 40px 28px; position: relative; }
+  .process-step .num { font-family: var(--mono); font-size: 12px; color: var(--amber); letter-spacing: 0.1em; display: block; margin-bottom: 20px; }
+  .process-step h4 { font-family: var(--display); font-size: 22px; font-weight: 600; margin-bottom: 12px; color: var(--smoke); text-transform: uppercase; }
+  .process-step p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  /* ============ TESTIMONIAL ============ */
+  .testimonial { text-align: center; padding: 140px 0; }
+  .testimonial blockquote {
+    font-family: var(--display); font-weight: 500; font-style: italic; font-size: clamp(26px, 4vw, 44px);
+    max-width: 800px; margin: 0 auto; line-height: 1.35; color: var(--smoke);
+  }
+  .testimonial .quote-mark { font-family: var(--display); font-size: 64px; color: var(--ember); line-height: 1; margin-bottom: 12px; display: block; }
+  .testimonial-attrib { margin-top: 30px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  /* ============ CTA BAND ============ */
+  .cta-band { background: var(--ember); padding: 100px 0; position: relative; overflow: hidden; }
+  .cta-band::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 600px 400px at 15% 20%, rgba(255,255,255,0.10), transparent 60%); }
+  .cta-inner { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .cta-inner h2 { font-size: clamp(32px, 4.6vw, 52px); max-width: 560px; color: var(--smoke); text-transform: uppercase; }
+  .cta-band .btn-primary { background: var(--smoke); color: var(--ember); }
+  .cta-band .btn-primary:hover { background: #fff; }
+
+  /* ============ FOOTER ============ */
+  footer { padding: 80px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 60px; border-bottom: 1px solid var(--line); }
+  .footer-logo { font-family: var(--display); font-size: 27px; font-weight: 700; margin-bottom: 16px; }
+  .footer-logo span { color: var(--ember-bright); }
+  .footer-grid p { color: var(--muted); font-size: 14px; max-width: 260px; }
+  .footer-col h5 { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 18px; }
+  .footer-col a, .footer-col p { display: block; font-size: 14px; color: var(--smoke-dim); margin-bottom: 10px; }
+  .footer-col a:hover { color: var(--smoke); }
+  .footer-bottom {
+    padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--muted);
+  }
+
+  /* ============ FLOATING WHATSAPP ============ */
+  .wa-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: #25D366; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px -8px rgba(37, 211, 102, 0.6);
+    transition: transform 0.25s ease;
+  }
+  .wa-float:hover { transform: scale(1.08); }
+  .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+  .wa-float .pulse { position: absolute; inset: 0; border-radius: 50%; background: #25D366; animation: waPulse 2.4s ease-out infinite; z-index: -1; }
+  @keyframes waPulse { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(1.9); opacity: 0; } }
+
+  .reveal { opacity: 0; transform: translateY(28px); }
+
+  @media (max-width: 980px) {
+    nav.links { display: none; }
+    .phi-grid { grid-template-columns: 1fr; gap: 56px; }
+    .process-row { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .looks-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-slideshow { aspect-ratio: 16 / 11; }
+  }
+  @media (max-width: 620px) {
+    .process-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .cta-inner { flex-direction: column; align-items: flex-start; }
+    .dish-row { flex-direction: column; gap: 6px; }
+    .section-head { flex-direction: column; align-items: flex-start; }
+    .looks-grid { grid-template-columns: 1fr; }
+    .gallery-slideshow { aspect-ratio: 4 / 5; }
+    .gallery-cap { left: 20px; bottom: 18px; font-size: 11px; }
+    .gallery-arrows { right: 16px; bottom: 16px; }
+    .gallery-arrow { width: 36px; height: 36px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="siteNav">
+  <div class="logo">EMBER<span>.</span></div>
+  <nav class="links">
+    <a href="#menu">Menu</a>
+    <a href="#philosophy">Kitchen</a>
+    <a href="#process">Fire</a>
+    <a href="#contact">Reserve</a>
+  </nav>
+  <a class="btn-wa" href="https://wa.me/263770000000?text=Hi%20Ember%2C%20I%27d%20like%20to%20make%20a%20reservation" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.31-1.94 1.36-.5.05-1.02.24-3.4-.71-2.88-1.15-4.73-4.06-4.87-4.25-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.28.75 1.24 1.61 2.01 1.11 1 2.05 1.31 2.33 1.46.28.14.44.12.6-.07.17-.19.71-.83.9-1.11.19-.28.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+    Reserve
+  </a>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-slideshow" id="heroSlideshow">
+    <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1627947063935-55577ec3c2e1?auto=format&fit=crop&w=1600&q=75')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=1600&q=75')"></div>
+    <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1621851709622-e19c9a4f0cc5?auto=format&fit=crop&w=1600&q=75')"></div>
+  </div>
+  <div class="hero-bg-grad"></div>
+  <div class="embers" id="embersLayer"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow reveal" id="heroEyebrow">Harare — Open Flame Kitchen</div>
+    <h1 class="reveal" id="heroLine1">Wood. Fire.</h1>
+    <h1 class="reveal" id="heroLine2"><span class="ember-word">Flavour.</span></h1>
+    <p class="hero-sub reveal" id="heroSub">Ember is a charcoal-grill kitchen in Harare built around one tool: open flame. No fryers, no shortcuts — everything on the menu passes over wood or coal before it reaches you.</p>
+    <div class="hero-ctas reveal" id="heroCtas">
+      <a class="btn-primary" href="https://wa.me/263770000000?text=Hi%20Ember%2C%20I%27d%20like%20to%20make%20a%20reservation" target="_blank" rel="noopener">Reserve a table →</a>
+      <a class="link-ghost" href="#menu">View the menu</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>Scroll</div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker-band">
+  <div class="ticker-track" id="tickerTrack">
+    <span>Wood-Fired</span><span>Charcoal Grilled</span><span>Slow Smoked</span><span>Open Flame</span><span>Locally Sourced</span><span>No Fryers, Ever</span>
+    <span>Wood-Fired</span><span>Charcoal Grilled</span><span>Slow Smoked</span><span>Open Flame</span><span>Locally Sourced</span><span>No Fryers, Ever</span>
+  </div>
+</div>
+
+<!-- ============ PHILOSOPHY ============ -->
+<section class="philosophy" id="philosophy">
+  <div class="wrap phi-grid">
+    <div>
+      <div class="eyebrow reveal">The Kitchen</div>
+      <p class="phi-quote reveal" style="margin-top:24px;">Fire doesn't hide anything. <span class="accent">If it isn't fresh, it shows.</span> That's the discipline behind every plate we send out — nothing goes on the grill unless it's good enough to stand alone next to the flame.</p>
+      <div class="phi-attrib reveal">— Head Chef, Ember</div>
+    </div>
+    <div class="phi-stats reveal">
+      <div class="stat-row"><span class="num">100%</span><span class="label">Of mains cooked over wood or charcoal, no exceptions</span></div>
+      <div class="stat-row"><span class="num">5</span><span class="label">Local farms we source vegetables and meat from directly</span></div>
+      <div class="stat-row"><span class="num">3</span><span class="label">Wood types in rotation — msasa, mopane, and acacia</span></div>
+      <div class="stat-row"><span class="num">40</span><span class="label">Covers, kept deliberately small for kitchen control</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENU ============ -->
+<section id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">The Menu</h2>
+      <p class="reveal">Grouped by how close it sits to the flame — from the first char to the last ember.</p>
+    </div>
+
+    <div class="menu-stage reveal">
+      <div class="stage-head"><h3>Kindling</h3><span class="stage-line"></span><span class="stage-note">To start</span></div>
+      <div class="dish-list">
+        <div class="dish-row"><div><div class="dish-name">Charred Corn, Peri Butter</div><div class="dish-desc">Whole cob over coal, basted in house peri-peri butter.</div></div><div class="dish-price">$6</div></div>
+        <div class="dish-row"><div><div class="dish-name">Smoked Aubergine Dip, Flatbread</div><div class="dish-desc">Fire-blistered aubergine, tahini, charred flatbread.</div></div><div class="dish-price">$7</div></div>
+        <div class="dish-row"><div><div class="dish-name">Grilled Prawns, Chilli Oil</div><div class="dish-desc">Quick-fired over open flame, finished with house chilli oil.</div></div><div class="dish-price">$9</div></div>
+      </div>
+    </div>
+
+    <div class="menu-stage reveal">
+      <div class="stage-head"><h3>The Grill</h3><span class="stage-line"></span><span class="stage-note">Mains</span></div>
+      <div class="dish-list">
+        <div class="dish-row"><div><div class="dish-name">Wood-Fired Sirloin, Chimichurri</div><div class="dish-desc">Grass-fed sirloin, msasa wood, fresh chimichurri.</div></div><div class="dish-price">$18</div></div>
+        <div class="dish-row"><div><div class="dish-name">Whole Grilled Bream, Citrus</div><div class="dish-desc">Whole fish over coal, charred citrus, herb oil.</div></div><div class="dish-price">$16</div></div>
+        <div class="dish-row"><div><div class="dish-name">Smoked Half Chicken, Peri-Peri</div><div class="dish-desc">Slow-smoked then finished hot over open flame.</div></div><div class="dish-price">$14</div></div>
+        <div class="dish-row"><div><div class="dish-name">Charred Vegetable Platter (v)</div><div class="dish-desc">Seasonal vegetables, whole over coal, herb dressing.</div></div><div class="dish-price">$12</div></div>
+      </div>
+    </div>
+
+    <div class="menu-stage reveal">
+      <div class="stage-head"><h3>Coals</h3><span class="stage-line"></span><span class="stage-note">Sides</span></div>
+      <div class="dish-list">
+        <div class="dish-row"><div><div class="dish-name">Roasted Sweet Potato, Butter</div></div><div class="dish-price">$5</div></div>
+        <div class="dish-row"><div><div class="dish-name">Charred Greens, Garlic</div></div><div class="dish-price">$5</div></div>
+        <div class="dish-row"><div><div class="dish-name">Fire-Baked Sadza</div></div><div class="dish-price">$4</div></div>
+      </div>
+    </div>
+
+    <div class="menu-stage reveal">
+      <div class="stage-head"><h3>Ember's Last Light</h3><span class="stage-line"></span><span class="stage-note">Dessert</span></div>
+      <div class="dish-list">
+        <div class="dish-row"><div><div class="dish-name">Smoked Chocolate Tart</div></div><div class="dish-price">$7</div></div>
+        <div class="dish-row"><div><div class="dish-name">Grilled Pineapple, Rum Caramel</div></div><div class="dish-price">$6</div></div>
+      </div>
+    </div>
+
+    <div class="menu-stage reveal">
+      <div class="stage-head"><h3>Draughts</h3><span class="stage-line"></span><span class="stage-note">To drink</span></div>
+      <div class="dish-list">
+        <div class="dish-row"><div><div class="dish-name">House Red / White</div></div><div class="dish-price">$6</div></div>
+        <div class="dish-row"><div><div class="dish-name">Zimbabwean Craft Lager</div></div><div class="dish-price">$4</div></div>
+        <div class="dish-row"><div><div class="dish-name">Smoked Old Fashioned</div></div><div class="dish-price">$9</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FROM THE GRILL ============ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">From The Grill</h2>
+      <p class="reveal">Three shots of the fire actually doing the work.</p>
+    </div>
+    <div class="looks-grid">
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1613628068926-0a5562f4aa9e?auto=format&fit=crop&w=900&q=75" alt="Close-up of grilled meat fresh off the coals" loading="lazy">
+        <div class="look-caption">
+          <span class="num">The Sirloin</span>
+          <h3>Straight Off The Coals</h3>
+          <p>Rested, then plated within minutes.</p>
+        </div>
+      </div>
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1621851709622-e19c9a4f0cc5?auto=format&fit=crop&w=900&q=75" alt="Burning charcoal ready for grilling" loading="lazy">
+        <div class="look-caption">
+          <span class="num">The Fire</span>
+          <h3>Charcoal, Never Gas</h3>
+          <p>Every service starts an hour before doors open.</p>
+        </div>
+      </div>
+
+      <div class="look-card reveal">
+        <img src="https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=900&q=75" alt="Chef working the open flame grill" loading="lazy">
+        <div class="look-caption">
+          <span class="num">The Grill</span>
+          <h3>Worked By Hand</h3>
+          <p>No timers — the fire tells you when it's ready.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSIDE EMBER ============ -->
+<section class="philosophy" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">Inside Ember</h2>
+      <p class="reveal">A look at the kitchen, the coals, and the room.</p>
+    </div>
+    <div class="gallery-slideshow reveal" id="gallerySlideshow">
+      <div class="gallery-track">
+        <div class="gallery-item active"><img src="https://images.unsplash.com/photo-1627947063935-55577ec3c2e1?auto=format&fit=crop&w=1400&q=75" alt="Cooking directly over open fire"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1558540319-35836c870b28?auto=format&fit=crop&w=1400&q=75" alt="Grill positioned above open flame"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1526213174737-acd9757c6bf3?auto=format&fit=crop&w=1400&q=75" alt="Close-up of the bonfire embers"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1680027412524-dcabcd83dc59?auto=format&fit=crop&w=1400&q=75" alt="Pile of glowing charcoal"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588182657969-777d766e31ab?auto=format&fit=crop&w=1400&q=75" alt="Fire on the charcoal grill"></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1613628068926-0a5562f4aa9e?auto=format&fit=crop&w=1400&q=75" alt="Grilled meat plated close-up"></div>
+      </div>
+      <div class="gallery-dots" id="galleryDots"></div>
+      <div class="gallery-cap"><span id="galleryIndex">01</span><span id="galleryLabel">The Fire</span></div>
+      <div class="gallery-arrows">
+        <div class="gallery-arrow" id="galleryPrev" role="button" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div class="gallery-arrow" id="galleryNext" role="button" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="reveal">How we cook</h2>
+      <p class="reveal">Four stages, no exceptions — this is the only method used in the kitchen.</p>
+    </div>
+    <div class="process-row">
+      <div class="process-step reveal">
+        <span class="num">01</span>
+        <h4>Sourced</h4>
+        <p>Meat and vegetables come from five local farms we work with directly, most delivered same-day.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">02</span>
+        <h4>Seasoned</h4>
+        <p>Simple, deliberate seasoning — the fire is meant to be tasted, not covered up.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">03</span>
+        <h4>Fired</h4>
+        <p>Cooked over msasa, mopane, or acacia wood — never gas, never a fryer.</p>
+      </div>
+      <div class="process-step reveal">
+        <span class="num">04</span>
+        <h4>Rested</h4>
+        <p>Every grilled dish rests before plating, so what reaches your table is right.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="testimonial">
+  <div class="wrap">
+    <span class="quote-mark reveal">"</span>
+    <blockquote class="reveal">I've eaten at a lot of grill places in this city. Ember is the first one where I could actually taste the wood, not just the char.</blockquote>
+    <div class="testimonial-attrib reveal">— K. Chibanda, regular guest</div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section class="cta-band" id="contact">
+  <div class="wrap cta-inner">
+    <h2>Book your table<br>by the fire.</h2>
+    <a class="btn-primary" href="https://wa.me/263770000000?text=Hi%20Ember%2C%20I%27d%20like%20to%20make%20a%20reservation" target="_blank" rel="noopener">Message us on WhatsApp →</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">EMBER<span>.</span></div>
+        <p>A wood-fired kitchen in Harare — charcoal grilled, slow smoked, cooked over open flame, always.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Visit</h5>
+        <p>Sam Levy's Village<br>Harare, Zimbabwe</p>
+      </div>
+      <div class="footer-col">
+        <h5>Hours</h5>
+        <p>Tue – Sun, 12pm – 10pm<br>Closed Monday</p>
+      </div>
+      <div class="footer-col">
+        <h5>Reach Us</h5>
+        <a href="https://wa.me/263770000000" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ember Wood-Fired Kitchen. All rights reserved.</span>
+      <span>Site by Takudzwa Matimura — Web Projects</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a class="wa-float" href="https://wa.me/263770000000?text=Hi%20Ember%2C%20I%27d%20like%20to%20make%20a%20reservation" target="_blank" rel="noopener" aria-label="Message us on WhatsApp">
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2Zm5.83 14.06c-.24.68-1.4 1.31-1.94 1.36-.5.05-1.02.24-3.4-.71-2.88-1.15-4.73-4.06-4.87-4.25-.14-.19-1.17-1.55-1.17-2.96 0-1.4.74-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.29.29-.13.57.17.28.75 1.24 1.61 2.01 1.11 1 2.05 1.31 2.33 1.46.28.14.44.12.6-.07.17-.19.71-.83.9-1.11.19-.28.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.68-.17 1.36Z"/></svg>
+</a>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 40); });
+
+  // Ember particles
+  if (!reduced) {
+    const layer = document.getElementById('embersLayer');
+    for (let i = 0; i < 22; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'ember-dot';
+      dot.style.left = (Math.random() * 100) + '%';
+      dot.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+      dot.style.animationDelay = (Math.random() * 7) + 's';
+      dot.style.animationDuration = (5 + Math.random() * 4) + 's';
+      layer.appendChild(dot);
+    }
+
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('#heroEyebrow', { opacity: 1, y: 0, duration: 0.7 })
+      .to('#heroLine1', { opacity: 1, y: 0, duration: 0.9 }, '-=0.35')
+      .to('#heroLine2', { opacity: 1, y: 0, duration: 0.9 }, '-=0.6')
+      .to('#heroSub', { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
+      .to('#heroCtas', { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (['heroEyebrow','heroLine1','heroLine2','heroSub','heroCtas'].includes(el.id)) return;
+      gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    gsap.utils.toArray('.dish-row').forEach((row, i) => {
+      gsap.to(row, { opacity: 1, y: 0, duration: 0.5, delay: (i % 4) * 0.06, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 95%' } });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  }
+
+  // ---------- Hero background slideshow (crossfade) ----------
+  (function heroSlideshow() {
+    const slides = document.querySelectorAll('#heroSlideshow .hero-slide');
+    if (!slides.length) return;
+    let idx = 0;
+    setInterval(() => {
+      slides[idx].classList.remove('active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+    }, 6000);
+  })();
+
+  // ---------- Inside Ember gallery carousel ----------
+  (function gallery() {
+    const root = document.getElementById('gallerySlideshow');
+    if (!root) return;
+    const items = root.querySelectorAll('.gallery-item');
+    const dotsWrap = document.getElementById('galleryDots');
+    const idxLabel = document.getElementById('galleryIndex');
+    const capLabel = document.getElementById('galleryLabel');
+    const labels = ['The Fire', 'The Grill', 'The Embers', 'The Coals', 'The Flame', 'The Plate'];
+    let current = 0;
+    let timer;
+
+    items.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => go(i));
+      dotsWrap.appendChild(dot);
+    });
+    const dots = dotsWrap.querySelectorAll('.gallery-dot');
+
+    function go(i) {
+      items[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (i + items.length) % items.length;
+      items[current].classList.add('active');
+      dots[current].classList.add('active');
+      idxLabel.textContent = String(current + 1).padStart(2, '0');
+      capLabel.textContent = labels[current] || '';
+      restart();
+    }
+    function restart() {
+      clearInterval(timer);
+      timer = setInterval(() => go(current + 1), 5000);
+    }
+
+    document.getElementById('galleryNext').addEventListener('click', () => go(current + 1));
+    document.getElementById('galleryPrev').addEventListener('click', () => go(current - 1));
+    restart();
+  })();
+</script>
+</body>
+</html>

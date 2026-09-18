@@ -14,7 +14,97 @@ window.PROJECT_LINKS = {
   talentTrack: "#"  // e.g. "https://talenttrack-tpm.netlify.app"
 };
 
+/* ---- WHATSAPP — one central contact point for the portfolio ----
+   Replace the number below with your active WhatsApp number.
+   Use country code only, with no +, spaces, brackets, or dashes.
+   The current value matches the WhatsApp CTA already present in
+   packages.html, so every portfolio contact point stays consistent. */
+window.WHATSAPP_CONFIG = {
+  number: '263717549840',
+  message: "Hi Takudzwa, I found your portfolio and I'd like to discuss a website project."
+};
+
+function initScrollProgress() {
+  if (document.querySelector('.scroll-progress')) return;
+
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  bar.setAttribute('role', 'progressbar');
+  bar.setAttribute('aria-label', 'Page scroll progress');
+  bar.setAttribute('aria-valuemin', '0');
+  bar.setAttribute('aria-valuemax', '100');
+  bar.setAttribute('aria-valuenow', '0');
+  document.body.appendChild(bar);
+
+  let ticking = false;
+  const update = () => {
+    const doc = document.documentElement;
+    const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+    const progress = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
+    bar.style.setProperty('--scroll-progress', `${progress}%`);
+    bar.style.transform = `scaleX(${progress / 100})`;
+    bar.setAttribute('aria-valuenow', String(Math.round(progress)));
+    ticking = false;
+  };
+
+  const requestUpdate = () => {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+  };
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  window.addEventListener('load', requestUpdate, { once: true });
+  update();
+}
+
+function initFloatingWhatsApp() {
+  if (document.querySelector('.wa-float')) return;
+
+  const config = window.WHATSAPP_CONFIG || {};
+  const number = String(config.number || '').replace(/[^0-9]/g, '');
+  if (!number) return;
+
+  const message = encodeURIComponent(
+    config.message || "Hi Takudzwa, I'd like to discuss a website project."
+  );
+
+  const link = document.createElement('a');
+  link.className = 'wa-float';
+  link.href = `https://wa.me/${number}?text=${message}`;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.setAttribute('aria-label', 'Contact Takudzwa on WhatsApp');
+  link.setAttribute('title', 'Chat on WhatsApp');
+  link.innerHTML = `
+    <span class="wa-float-pulse" aria-hidden="true"></span>
+    <span class="wa-float-label" aria-hidden="true">Chat on WhatsApp</span>
+    <svg class="wa-float-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.2 3.8A10.2 10.2 0 0 0 4.3 16.1L3 21l5-1.3A10.2 10.2 0 0 0 20.2 3.8Z"></path>
+      <path d="M8.7 7.5c.2-.3.4-.3.7-.3h.5c.2 0 .4.1.5.4l.8 1.9c.1.2.1.4 0 .6l-.6.8c-.1.2-.1.4 0 .6.5.9 1.2 1.6 2.1 2.1.2.1.4.1.6 0l.8-.6c.2-.1.4-.1.6 0l1.9.8c.3.1.4.3.4.5v.5c0 .3 0 .5-.3.7-.4.3-1 .5-1.5.5-1.1 0-2.8-.7-4.4-2.2-1.6-1.5-2.4-3.2-2.4-4.3 0-.6.2-1.1.5-1.5Z"></path>
+    </svg>
+  `;
+
+  document.body.appendChild(link);
+
+  const reveal = () => {
+    window.requestAnimationFrame(() => link.classList.add('show'));
+  };
+
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    window.setTimeout(reveal, 2350);
+  } else {
+    window.setTimeout(reveal, 650);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+
+  initScrollProgress();
+  initFloatingWhatsApp();
 
   const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
   if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
