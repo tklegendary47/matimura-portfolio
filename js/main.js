@@ -10,8 +10,8 @@
 
 /* ---- CONFIG — edit these two lines with real project URLs when ready ---- */
 window.PROJECT_LINKS = {
-  aeo: "#",         // e.g. "https://aeocitation.com"
-  talentTrack: "#"  // e.g. "https://talenttrack-tpm.netlify.app"
+  aeo: "https://getbeacon.netlify.app/",         // e.g. "https://aeocitation.com"
+  talentTrack: "https://talenttrackx.netlify.app/"  // e.g. "https://talenttrack-tpm.netlify.app"
 };
 
 /* ---- WHATSAPP — one central contact point for the portfolio ----
