@@ -1,6 +1,6 @@
 /* ==========================================================================
-   MATIMURA — Portfolio Design System
-   Direction: "Cinematic Control Room" — night-instrument aesthetic.
+   NEXJOURNEE — Digital Studio Design System
+   Direction: "NexJournee Signal" — premium digital-studio aesthetic.
    A serif title sequence meets an engineer's HUD: brass telemetry accents,
    ink-blue depth, mono readouts. Built for a systems-first developer.
    ========================================================================== */
@@ -8,20 +8,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root{
-  --ink:        #090C11;
-  --ink-2:      #0D1119;
-  --panel:      #11161F;
-  --panel-2:    #161C28;
-  --line:       #262E3C;
-  --line-soft:  rgba(201,210,222,0.08);
-  --fog:        #CBD3DF;
-  --fog-dim:    #838EA0;
-  --white:      #F3F1EB;
-  --brass:      #C9A24B;
-  --brass-2:    #E4C579;
-  --brass-dim:  rgba(201,162,75,0.18);
-  --teal:       #2FA4B4;
-  --teal-dim:   rgba(47,164,180,0.16);
+  --ink:        #03090B;
+  --ink-2:      #061116;
+  --panel:      #08171B;
+  --panel-2:    #0D2025;
+  --line:       #17353A;
+  --line-soft:  rgba(255,255,255,0.08);
+  --fog:        #D5E2E3;
+  --fog-dim:    #8EA6AA;
+  --white:      #F7FAF8;
+  --brass:      #D7A94B;
+  --brass-2:    #FFD37A;
+  --brass-dim:  rgba(215,169,75,0.18);
+  --teal:       #11D9E8;
+  --teal-dim:   rgba(17,217,232,0.16);
 
   --f-display: 'Fraunces', serif;
   --f-body:    'Inter', -apple-system, sans-serif;
@@ -1067,3 +1067,210 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .teaser-inner{ display:flex; justify-content:space-between; align-items:center; gap:32px; flex-wrap:wrap; }
 .teaser-inner h3{ font-size:1.5rem; max-width:480px; }
 .teaser-inner p{ color:var(--fog-dim); font-size:0.92rem; margin-top:10px; max-width:440px; }
+
+/* ==========================================================================
+   NEXJOURNEE REMASTER
+   Premium agency layer: gold + electric cyan, sharper panels, stronger
+   commercial hierarchy, and founder-led trust without making the site feel
+   like a personal portfolio.
+   ========================================================================== */
+
+:root{
+  --nx-gold:#D7A94B;
+  --nx-gold-bright:#FFD37A;
+  --nx-cyan:#11D9E8;
+  --nx-cyan-soft:rgba(17,217,232,.14);
+  --nx-black:#020708;
+  --nx-panel:rgba(7,20,24,.86);
+}
+
+body{
+  background:
+    radial-gradient(circle at 12% 8%, rgba(215,169,75,.08), transparent 30%),
+    radial-gradient(circle at 88% 72%, rgba(17,217,232,.08), transparent 32%),
+    var(--ink);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    linear-gradient(115deg, transparent 0 48%, rgba(17,217,232,.025) 48.2%, transparent 48.6%),
+    linear-gradient(295deg, transparent 0 70%, rgba(215,169,75,.025) 70.2%, transparent 70.6%);
+  opacity:.8;
+}
+
+.wrap{max-width:1320px;}
+
+.nav-mark{
+  font-weight:600;
+  letter-spacing:.18em;
+  color:var(--white);
+}
+.nav-mark .dot{
+  width:10px;
+  height:10px;
+  border-radius:2px;
+  transform:rotate(45deg);
+  background:linear-gradient(135deg,var(--nx-gold),var(--nx-cyan));
+  box-shadow:0 0 16px rgba(17,217,232,.45),0 0 16px rgba(215,169,75,.35);
+}
+.nav-links{gap:32px;}
+.nav-links a::after{background:linear-gradient(90deg,var(--nx-gold),var(--nx-cyan));}
+.nav-cta{
+  border-color:var(--nx-gold);
+  background:rgba(215,169,75,.04);
+  box-shadow:inset 0 0 20px rgba(215,169,75,.04);
+}
+.nav-cta:hover{
+  background:linear-gradient(90deg,var(--nx-gold),var(--nx-gold-bright));
+  color:var(--nx-black)!important;
+}
+
+.hero{
+  min-height:clamp(760px,92vh,980px);
+  position:relative;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  width:620px;
+  height:620px;
+  right:-160px;
+  top:80px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(17,217,232,.13),transparent 68%);
+  filter:blur(12px);
+  pointer-events:none;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  width:520px;
+  height:520px;
+  left:-220px;
+  bottom:-160px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(215,169,75,.11),transparent 70%);
+  filter:blur(10px);
+  pointer-events:none;
+}
+
+.hero h1{
+  max-width:1050px;
+  font-size:clamp(3.4rem,8vw,8.2rem);
+  line-height:.91;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+}
+.hero h1 .accent,
+.hero h1 strong{
+  color:var(--nx-gold-bright);
+}
+.hero p{
+  max-width:700px;
+  color:#B7C9CB;
+}
+.eyebrow{
+  color:var(--nx-cyan);
+}
+.eyebrow::before{background:var(--nx-cyan);box-shadow:0 0 10px var(--nx-cyan);}
+
+.section-title{
+  letter-spacing:-.035em;
+}
+.section-label{
+  color:var(--nx-cyan);
+}
+
+.btn-primary{
+  background:linear-gradient(105deg,var(--nx-gold),var(--nx-gold-bright));
+  color:var(--nx-black);
+  border-color:var(--nx-gold-bright);
+  font-weight:700;
+}
+.btn-primary:hover{
+  box-shadow:0 0 28px rgba(17,217,232,.16),0 14px 34px -18px rgba(0,0,0,.9);
+}
+.btn-ghost:hover{
+  border-color:var(--nx-cyan);
+  color:var(--nx-cyan);
+}
+
+.pcard,.info-card,.process-card,.stat-card,.package-card{
+  background:
+    linear-gradient(145deg,rgba(13,32,37,.82),rgba(4,13,16,.9));
+  border-color:rgba(17,217,232,.13);
+  box-shadow:0 24px 70px -48px rgba(0,0,0,.95);
+}
+.pcard:hover,.info-card:hover,.package-card:hover{
+  border-color:rgba(17,217,232,.38);
+  box-shadow:0 28px 80px -45px rgba(0,0,0,.98),0 0 28px rgba(17,217,232,.05);
+}
+
+.num{color:var(--nx-gold);}
+.quote-band{
+  border-top:1px solid rgba(17,217,232,.14);
+  border-bottom:1px solid rgba(215,169,75,.14);
+  background:linear-gradient(90deg,rgba(215,169,75,.035),rgba(17,217,232,.045),rgba(215,169,75,.035));
+}
+.quote-band blockquote{
+  color:var(--white);
+}
+.quote-band cite{color:var(--nx-cyan);}
+
+.page-hero h1{
+  letter-spacing:-.04em;
+  text-wrap:balance;
+}
+.page-hero{
+  background:
+    radial-gradient(circle at 85% 20%,rgba(17,217,232,.07),transparent 28%),
+    radial-gradient(circle at 15% 30%,rgba(215,169,75,.06),transparent 25%);
+}
+
+footer{
+  border-top:1px solid rgba(17,217,232,.14);
+  background:
+    radial-gradient(circle at 85% 10%,rgba(17,217,232,.06),transparent 25%),
+    #020708;
+}
+.footer-brand{
+  font-family:var(--f-display);
+  font-size:clamp(2rem,4vw,4rem);
+  letter-spacing:-.03em;
+}
+.footer-col h4{color:var(--nx-gold-bright);}
+.footer-col a:hover{color:var(--nx-cyan);}
+
+.scroll-progress{
+  background:linear-gradient(90deg,var(--nx-gold),var(--nx-cyan),var(--nx-gold-bright)) !important;
+  box-shadow:0 0 14px rgba(17,217,232,.48),0 0 8px rgba(215,169,75,.4) !important;
+}
+
+.wa-float{
+  border-color:rgba(17,217,232,.4);
+  background:rgba(3,12,14,.95);
+}
+.wa-float-icon{stroke:var(--nx-cyan);}
+.wa-float:hover{border-color:var(--nx-gold-bright);}
+
+@media (max-width:900px){
+  .nav-links{gap:20px;}
+}
+@media (max-width:720px){
+  .hero{min-height:760px;}
+  .hero h1{font-size:clamp(3rem,15vw,5.2rem);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hero::before,.hero::after{display:none;}
+}
+
+/* NexJournee pricing grid */
+.tier-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+@media (max-width:1100px){.tier-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (max-width:720px){.tier-grid{grid-template-columns:1fr;}}
